@@ -1,0 +1,881 @@
+:root {
+  --ink: #12302d;
+  --ink-2: #1a3e3a;
+  --ink-3: #26514c;
+  --ink-4: #2f615b;
+  --paper: #efede2;
+  --chalk: #f0d264;
+  --sage: #9db89a;
+  --dim: #7b9793;
+  --red: #d9705c;
+  --future: #7fd39b;
+
+  --f-display: 'Bricolage Grotesque', system-ui, sans-serif;
+  --f-body: 'Karla', system-ui, sans-serif;
+  --f-mono: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--f-body);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 28px 20px 96px;
+}
+
+button {
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+  border: 0;
+  color: inherit;
+}
+:focus-visible {
+  outline: 2px solid var(--chalk);
+  outline-offset: 3px;
+}
+code {
+  font-family: var(--f-mono);
+  font-size: 0.9em;
+  background: var(--ink-3);
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
+/* ─── Header ─────────────────────────────────────────────────────────── */
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+.mark {
+  font-family: var(--f-display);
+  font-weight: 800;
+  font-size: 30px;
+  letter-spacing: -0.03em;
+  margin: 0;
+}
+.mark span {
+  color: var(--sage);
+}
+
+/* ─── Buttons ────────────────────────────────────────────────────────── */
+.btn {
+  background: var(--ink-3);
+  padding: 9px 16px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 14px;
+  transition: background 0.15s;
+}
+.btn:hover {
+  background: var(--ink-4);
+}
+.btn-go {
+  background: var(--chalk);
+  color: var(--ink);
+}
+.btn-go:hover {
+  background: #f5dc80;
+}
+.btn-go:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+.btn-quiet {
+  background: none;
+  color: var(--dim);
+  padding: 9px 4px;
+}
+.btn-quiet:hover {
+  color: var(--paper);
+}
+.btn-danger {
+  background: none;
+  color: var(--red);
+  padding: 9px 4px;
+}
+
+/* ─── Tonight band ───────────────────────────────────────────────────── */
+.tonight-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 34px;
+}
+.tonight {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: var(--chalk);
+  color: var(--ink);
+  border-radius: 10px;
+  padding: 20px 24px;
+  transform: rotate(-0.35deg);
+  transition: transform 0.15s;
+}
+button.tonight:hover {
+  transform: rotate(-0.35deg) translateY(-2px);
+}
+.tonight .eyebrow {
+  font-family: var(--f-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.65;
+  margin-bottom: 8px;
+}
+.tonight .task {
+  font-family: var(--f-display);
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin: 0 0 6px;
+}
+.tonight .why {
+  font-size: 14px;
+  opacity: 0.75;
+  margin: 0;
+}
+.tonight-clear {
+  background: none;
+  border: 1px dashed var(--ink-3);
+  transform: none;
+  margin-bottom: 34px;
+}
+.tonight-clear .task {
+  font-size: 18px;
+  color: var(--dim);
+}
+
+/* ─── Blocks ─────────────────────────────────────────────────────────── */
+.block {
+  margin-bottom: 40px;
+}
+.block-head {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+.block-head h2 {
+  font-family: var(--f-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--sage);
+  margin: 0;
+}
+.block-note {
+  font-family: var(--f-mono);
+  font-size: 11px;
+  color: var(--dim);
+}
+
+/* ─── Timeline ───────────────────────────────────────────────────────── */
+.timeline-wrap {
+  overflow-x: auto;
+  overflow-y: visible;
+  padding-bottom: 8px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--ink-3) transparent;
+}
+.timeline-wrap::-webkit-scrollbar {
+  height: 8px;
+}
+.timeline-wrap::-webkit-scrollbar-thumb {
+  background: var(--ink-3);
+  border-radius: 99px;
+}
+.timeline {
+  display: flex;
+  gap: 8px;
+  min-width: min-content;
+}
+.day {
+  position: relative;
+  flex: 0 0 132px;
+  min-height: 132px;
+  background: var(--ink-2);
+  border: 1px solid transparent;
+  border-radius: 9px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.day-today {
+  border-color: var(--chalk);
+}
+.day-armed {
+  border-color: var(--ink-4);
+  border-style: dashed;
+}
+.day-over {
+  border-color: var(--chalk);
+  border-style: solid;
+  background: var(--ink-3);
+}
+.day-head {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  background: none;
+  padding: 2px 2px 6px;
+  border-bottom: 1px solid var(--ink-3);
+  text-align: left;
+}
+.day-wd {
+  font-family: var(--f-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--sage);
+}
+.day-today .day-wd {
+  color: var(--chalk);
+}
+.day-num {
+  font-family: var(--f-display);
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1;
+}
+.day-mo {
+  font-family: var(--f-mono);
+  font-size: 10px;
+  color: var(--dim);
+}
+.day-body {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1;
+}
+.pill {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--ink-3);
+  border-radius: 5px;
+  padding: 6px 7px;
+  text-align: left;
+  transition: background 0.12s;
+}
+.pill:hover {
+  background: var(--ink-4);
+}
+.pill-dot {
+  flex: 0 0 auto;
+  width: 6px;
+  height: 6px;
+  border-radius: 99px;
+  background: var(--chalk);
+}
+.pill-name {
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.25;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.day-hint {
+  margin: auto;
+  font-family: var(--f-mono);
+  font-size: 10px;
+  color: var(--dim);
+  text-align: center;
+}
+
+/* Day search popover.
+   Fixed + portaled to <body>: .timeline-wrap is a scroll container, and a
+   scroller clips absolutely-positioned descendants on BOTH axes (an
+   overflow-y of `visible` computes to `auto` when overflow-x isn't). Top,
+   left, width and max-height are set inline from the day's live rect. */
+.day-search {
+  position: fixed;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: var(--ink-4);
+  border: 1px solid var(--sage);
+  border-radius: 8px;
+  padding: 8px;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.4);
+}
+.day-search input {
+  width: 100%;
+  background: var(--ink);
+  color: var(--paper);
+  border: 1px solid var(--ink-3);
+  border-radius: 5px;
+  padding: 7px 9px;
+  font-family: var(--f-body);
+  font-size: 13px;
+}
+.day-search input:focus {
+  outline: none;
+  border-color: var(--chalk);
+}
+.day-search-list {
+  margin-top: 6px;
+  /* height comes from the popover's computed max-height, so the list scrolls
+     inside whatever room the viewport actually has. */
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.day-search input {
+  flex: 0 0 auto;
+}
+.day-search-item {
+  background: none;
+  text-align: left;
+  padding: 6px 8px;
+  border-radius: 5px;
+  font-size: 13px;
+  font-weight: 500;
+}
+.day-search-item:hover {
+  background: var(--ink-2);
+}
+.day-search-empty {
+  padding: 8px;
+  font-size: 12px;
+  color: var(--dim);
+}
+
+/* ─── Filters ────────────────────────────────────────────────────────── */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 20px;
+  padding: 14px 16px;
+  background: var(--ink-2);
+  border-radius: 9px;
+}
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.filter-label {
+  font-family: var(--f-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--sage);
+}
+.chips {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.chip {
+  background: var(--ink-3);
+  color: var(--paper);
+  border-radius: 99px;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  transition: background 0.12s, color 0.12s;
+}
+.chip:hover {
+  background: var(--ink-4);
+}
+.chip-on {
+  background: var(--chalk);
+  color: var(--ink);
+}
+/* Search box — first filter group, and the widest one. */
+.filter-search {
+  flex: 1 1 240px;
+  min-width: 0;
+}
+.search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.search-icon {
+  position: absolute;
+  left: 10px;
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: var(--sage);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  pointer-events: none;
+}
+/* the global `input` rule owns most of this; only the chrome differs */
+.search-input {
+  padding: 8px 30px 8px 30px;
+  border-radius: 99px;
+  background: var(--ink-3);
+  border-color: transparent;
+  font-size: 13px;
+}
+.search-input::placeholder {
+  color: var(--dim);
+}
+.search-input:focus {
+  border-color: var(--sage);
+  background: var(--ink);
+}
+/* kill the WebKit type=search furniture so ours is the only affordance */
+.search-input::-webkit-search-decoration,
+.search-input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+}
+.search-clear {
+  position: absolute;
+  right: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 99px;
+  background: none;
+  color: var(--dim);
+  font-size: 17px;
+  line-height: 1;
+}
+.search-clear:hover {
+  background: var(--ink-4);
+  color: var(--paper);
+}
+.search-count {
+  font-family: var(--f-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+.sort-select {
+  background: var(--ink-3);
+  color: var(--paper);
+  border: 0;
+  border-radius: 6px;
+  padding: 7px 10px;
+  font-family: var(--f-body);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* ─── Recipe grid ────────────────────────────────────────────────────── */
+.rgrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 14px;
+}
+.rcard {
+  background: var(--ink-2);
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.15s, background 0.15s;
+}
+.rcard:hover {
+  background: var(--ink-3);
+  transform: translateY(-3px);
+}
+.rcard:active {
+  cursor: grabbing;
+}
+.rcard-img {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  background: var(--ink-3);
+}
+.rcard-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.rcard-img-blank {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  font-family: var(--f-display);
+  font-weight: 800;
+  font-size: 40px;
+  color: var(--dim);
+}
+.rcard-source {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(18, 48, 45, 0.82);
+  color: var(--chalk);
+  font-family: var(--f-mono);
+  font-size: 10px;
+  padding: 3px 7px;
+  border-radius: 99px;
+}
+.rcard-body {
+  padding: 11px 12px 13px;
+}
+.rcard-name {
+  font-family: var(--f-display);
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  margin: 0 0 8px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.5em;
+}
+.rcard-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-family: var(--f-mono);
+  font-size: 11px;
+}
+.rcard-time {
+  color: var(--dim);
+}
+.rcard-date {
+  color: var(--paper);
+}
+.rcard-date.is-future {
+  color: var(--future);
+}
+.rcard-date.is-none {
+  color: var(--dim);
+}
+
+/* ─── Empty + toast ──────────────────────────────────────────────────── */
+.empty {
+  border: 1px dashed var(--ink-3);
+  border-radius: 9px;
+  padding: 26px;
+  text-align: center;
+  color: var(--dim);
+  font-size: 14px;
+}
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 22px;
+  transform: translateX(-50%);
+  background: var(--paper);
+  color: var(--ink);
+  padding: 9px 18px;
+  border-radius: 99px;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+  z-index: 60;
+}
+.toast-bad {
+  background: var(--red);
+  color: #fff;
+}
+
+/* ─── Editor sheet ───────────────────────────────────────────────────── */
+.scrim {
+  position: fixed;
+  inset: 0;
+  background: rgba(6, 22, 20, 0.72);
+  z-index: 40;
+  padding: 20px;
+  overflow-y: auto;
+}
+.sheet {
+  max-width: 640px;
+  margin: 24px auto;
+  background: var(--ink-2);
+  border-radius: 12px;
+  padding: 26px;
+}
+.sheet h2 {
+  font-family: var(--f-display);
+  font-weight: 800;
+  font-size: 22px;
+  letter-spacing: -0.02em;
+  margin: 0 0 22px;
+}
+.field {
+  margin-bottom: 18px;
+}
+.field label {
+  display: block;
+  font-family: var(--f-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--sage);
+  margin-bottom: 6px;
+}
+.field .hint {
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--dim);
+}
+input,
+textarea {
+  width: 100%;
+  background: var(--ink);
+  color: var(--paper);
+  border: 1px solid var(--ink-3);
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-family: var(--f-body);
+  font-size: 15px;
+}
+input:focus,
+textarea:focus {
+  border-color: var(--sage);
+  outline: none;
+}
+textarea {
+  resize: vertical;
+  min-height: 120px;
+  line-height: 1.6;
+}
+.row2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.source-link {
+  display: inline-block;
+  margin-top: 8px;
+  font-family: var(--f-mono);
+  font-size: 12px;
+  color: var(--chalk);
+  text-decoration: none;
+}
+.source-link:hover {
+  text-decoration: underline;
+}
+/* ─── Read-only recipe view ──────────────────────────────────────────── */
+.view-hero {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 9px;
+  display: block;
+  margin-bottom: 18px;
+  background: var(--ink-3);
+}
+.sheet h2.view-title {
+  margin-bottom: 10px;
+}
+.view-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+  font-family: var(--f-mono);
+  font-size: 12px;
+  color: var(--dim);
+  margin-bottom: 22px;
+}
+.view-meta a {
+  color: var(--chalk);
+  text-decoration: none;
+}
+.view-meta a:hover {
+  text-decoration: underline;
+}
+/* the one editable control in this sheet — give it its own lane */
+.view-date {
+  padding: 14px 16px;
+  background: var(--ink);
+  border-radius: 9px;
+}
+.view-date input {
+  max-width: 220px;
+}
+.view-section {
+  margin-bottom: 22px;
+}
+.view-section h3 {
+  font-family: var(--f-mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--sage);
+  margin: 0 0 10px;
+}
+.view-text {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.view-night {
+  color: var(--chalk);
+}
+.view-blank {
+  color: var(--dim);
+  font-style: italic;
+}
+/* full URL, visible and clickable — long ones wrap instead of overflowing */
+.view-url {
+  display: inline-block;
+  max-width: 100%;
+  font-family: var(--f-mono);
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--chalk);
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+.view-url:hover {
+  text-decoration: underline;
+}
+.view-list,
+.view-steps {
+  margin: 0;
+  padding-left: 20px;
+  font-size: 15px;
+  line-height: 1.65;
+}
+.view-list li,
+.view-steps li {
+  margin-bottom: 4px;
+}
+.view-list {
+  list-style: none;
+  padding-left: 0;
+}
+.view-list li {
+  position: relative;
+  padding-left: 18px;
+}
+.view-list li::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 0.62em;
+  width: 5px;
+  height: 5px;
+  border-radius: 99px;
+  background: var(--sage);
+}
+.view-steps li::marker {
+  color: var(--sage);
+  font-family: var(--f-mono);
+  font-size: 0.85em;
+}
+
+.sheet-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: 26px;
+  padding-top: 20px;
+  border-top: 1px solid var(--ink-3);
+}
+.sheet-actions .spacer {
+  flex: 1;
+}
+
+@media (max-width: 560px) {
+  .row2 {
+    grid-template-columns: 1fr;
+  }
+  .tonight .task {
+    font-size: 20px;
+  }
+
+  /* Three cards across. minmax(0,…) — not auto — so a long recipe name
+     can't push a track wider than its third. */
+  .rgrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+  .rcard {
+    border-radius: 8px;
+  }
+  .rcard-body {
+    padding: 7px 8px 9px;
+  }
+  .rcard-name {
+    font-size: 12px;
+    line-height: 1.2;
+    margin-bottom: 5px;
+    -webkit-line-clamp: 3;
+    min-height: 3.6em;
+    overflow-wrap: break-word;
+  }
+  /* ~110px of card can't hold "45 min" and "Unscheduled" side by side */
+  .rcard-foot {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    font-size: 9.5px;
+  }
+  .rcard-img-blank {
+    font-size: 26px;
+  }
+  .rcard-source {
+    top: 5px;
+    right: 5px;
+    font-size: 8.5px;
+    padding: 2px 5px;
+  }
+}
+
+/* iOS Safari zooms the page whenever a focused form control computes to
+   under 16px — and the day popover autofocuses its input the moment you tap
+   a day. Touch devices get 16px; mouse/trackpad keeps the tighter sizes. */
+@media (pointer: coarse) {
+  input,
+  textarea,
+  select,
+  .sort-select,
+  .search-input,
+  .day-search input {
+    font-size: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+  .rcard:hover,
+  button.tonight:hover {
+    transform: none;
+  }
+}
