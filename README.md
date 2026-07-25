@@ -46,9 +46,26 @@ npm run build    # production build into dist/
 
 ## Deploy on Netlify
 
-Push this folder to GitHub, then in Netlify: New site → import the repo. The
-included `netlify.toml` already sets the build command (`npm run build`) and
-publish directory (`dist`). No other config needed.
+In Netlify: **Add new site → Import an existing project → GitHub**, pick this
+repo, and deploy. Leave every build setting blank — the root `netlify.toml`
+already declares all of it:
+
+| | |
+|---|---|
+| Base directory | repo root (the app lives here, not in a subfolder) |
+| Build command | `npm run build` |
+| Publish directory | `dist` |
+| Node version | 20, pinned in `[build.environment]` |
+
+Every push to `main` redeploys. Pull requests get their own deploy preview.
+
+`netlify.toml` must stay at the repo root — Netlify only reads it from there,
+and the build runs from the same place, so `package.json` has to be its
+neighbour. If you ever move the app into a subfolder, set `base` in
+`[build]` to match, or the build won't find anything to install.
+
+The SPA redirect in that file matters: this is a single page with no server,
+so any path other than `/` has to fall through to `index.html`.
 
 ## A note on the secret
 

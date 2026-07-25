@@ -1,0 +1,21 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  # Pin the toolchain so Netlify's default image can't drift out from under
+  # Vite 5 (which needs Node 18+). Bump deliberately, not by surprise.
+  NODE_VERSION = "20"
+  NPM_FLAGS = "--include=dev"
+
+# SPA fallback — single page, so route everything to index.html
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# The build output is content-hashed, so it can be cached hard.
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
